@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import profilePic from './public/profilepic.jpg';
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
@@ -254,7 +255,7 @@ function App() {
               }}
             >
               <img 
-                src="https://drive.google.com/file/d/1zVlpxZQuDIATFdy3zhLIyj_9V9F6k9FN/view?usp=drivesdk " 
+                src={profilePic}
                 alt="Oluwatobiloba Durodola"
                 className="w-64 h-64 rounded-full object-cover shadow-lg"
               />
