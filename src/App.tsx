@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Github, Linkedin, Mail, ExternalLink, Sun, Moon } from 'lucide-react';
 import { motion } from 'framer-motion';
-// import profilePic from './public/profilepic.jpg'; // Remove this import
+import profilePic from './public/profilepic.jpg'; 
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode');
-    return saved ? JSON.parse(saved) : true; // Default to dark mode
+    return saved ? JSON.parse(saved) : true;
   });
-  const [scrollPercentage, setScrollPercentage] = useState(0); // State for scroll %
+  const [scrollPercentage, setScrollPercentage] = useState(0); // <-- Add state for scroll %
 
-  // Effect for dark mode
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
     if (darkMode) {
@@ -20,14 +19,15 @@ function App() {
     }
   }, [darkMode]);
 
-  // Effect for scroll listener
+  // --- Add Effect for Scroll Listener ---
   useEffect(() => {
     const handleScroll = () => {
-      const element = document.documentElement;
+      const element = document.documentElement; // Or document.body if needed
       const scrollTop = element.scrollTop || document.body.scrollTop;
       const scrollHeight = element.scrollHeight || document.body.scrollHeight;
       const clientHeight = element.clientHeight || window.innerHeight;
 
+      // Prevent division by zero if scrollHeight == clientHeight
       if (scrollHeight <= clientHeight) {
         setScrollPercentage(0);
         return;
@@ -38,30 +38,32 @@ function App() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll); // Cleanup
-  }, []);
 
-  // Effect for fade-in animation observer (Your existing code)
+    // Cleanup function to remove listener when component unmounts
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []); // Empty dependency array ensures this runs only on mount and unmount
+  // --- End Effect for Scroll Listener ---
+
+  // This useEffect is for the SECTION fade-in, keep it as is
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Use 'show' class from your index.css for fade-in
-            entry.target.classList.add('show');
+            // Using 'show' class from your original code for section fade
+            entry.target.classList.add('show'); 
           }
         });
       },
       { threshold: 0.1 }
     );
 
-    // Target elements with 'fade-in' class from your index.css
-    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    // Using 'fade-in' class from your original code for section fade targeting
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el)); 
 
-    return () => observer.disconnect(); // Cleanup
+    return () => observer.disconnect();
   }, []);
 
-  // --- Data Arrays (projects, certifications, tools) ---
   const projects = [
     {
       title: "Generate Backend Code Instantly With AI",
@@ -71,37 +73,37 @@ function App() {
       linkText: "Live Site"
     },
     {
-        title: "TODO Application Infrastructure and Deployment",
-        date: "Mar 2025",
-        description: "This infrastructure was set up to deploy a TODO app.",
-        url: "https://github.com/onlydurodola/hng12-stage4-todo-infra",
-        linkText: "GitHub Repository"
-      },
-      {
-        title: "Orchestration App",
-        date: "Feb 2025",
-        description: "An app that automates code testing and deploys on K8s.",
-        url: "https://github.com/onlydurodola/hng-stage3-orchestration-app",
-        linkText: "GitHub Repository"
-      },
-      {
-        title: "Terraform - 1st GitOps",
-        date: "Jan 2025",
-        description: "Maintain vpc & eks with terraform for vprofile project.",
-        url: "https://github.com/onlydurodola/iac-vprofile",
-        linkText: "GitHub Repository"
-      },
-      {
-        title: "Vprofile - action",
-        date: "Jan 2025",
-        description: "This is the second part of a GitOps project to deploy.",
-        url: "https://github.com/onlydurodola/vprofile-action",
-        linkText: "GitHub Repository"
-      }
+      title: "TODO Application Infrastructure and Deployment",
+      date: "Mar 2025",
+      description: "This infrastructure was set up to deploy a TODO app.",
+      url: "https://github.com/onlydurodola/hng12-stage4-todo-infra",
+      linkText: "GitHub Repository"
+    },
+    {
+      title: "Orchestration App",
+      date: "Feb 2025",
+      description: "An app that automates code testing and deploys on K8s.",
+      url: "https://github.com/onlydurodola/hng-stage3-orchestration-app",
+      linkText: "GitHub Repository"
+    },
+    {
+      title: "Terraform - 1st GitOps",
+      date: "Jan 2025",
+      description: "Maintain vpc & eks with terraform for vprofile project.",
+      url: "https://github.com/onlydurodola/iac-vprofile",
+      linkText: "GitHub Repository"
+    },
+    {
+      title: "Vprofile - action",
+      date: "Jan 2025",
+      description: "This is the second part of a GitOps project to deploy.",
+      url: "https://github.com/onlydurodola/vprofile-action",
+      linkText: "GitHub Repository"
+    }
   ];
 
   const certifications = [
-    {
+     {
       title: "HNG Finalist",
       issuer: "HNG Tech",
       url: "https://certgo.app/c-6d466418",
@@ -140,29 +142,81 @@ function App() {
     }
   ];
 
-  const tools = [
-    // Using Simple Icons SVGs directly via CDN
-    { name: "AWS", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/amazonaws.svg" },
-    { name: "Docker", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/docker.svg" },
-    { name: "Kubernetes", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/kubernetes.svg" },
-    { name: "Jenkins", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/jenkins.svg" },
-    { name: "GitHub Actions", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/githubactions.svg" },
-    { name: "Terraform", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/terraform.svg" },
-    { name: "Ansible", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ansible.svg" },
-    { name: "Prometheus", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/prometheus.svg" },
-    { name: "Grafana", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/grafana.svg" },
-    { name: "Loki", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/grafana.svg" }, // Assuming same as Grafana or find specific if exists
-    { name: "AlertManager", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/prometheus.svg" }, // Assuming same as Prometheus or find specific
-    { name: "SonarQube", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/sonarqube.svg" },
-    { name: "RabbitMQ", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/rabbitmq.svg" },
-    { name: "Redis", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/redis.svg" },
-    { name: "PostgreSQL", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/postgresql.svg" },
-    { name: "Python", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/python.svg" },
-    { name: "Bash", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/gnubash.svg" },
-    { name: "Nginx", icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nginx.svg" }
-  ];
+   const tools = [
+     {
+       name: "AWS",
+       icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/amazonaws.svg"
+     },
+     {
+       name: "Docker",
+       icon: "https://cdn.simpleicons.org/docker/2496ED" // Example using specific color URL
+     },
+     {
+       name: "Kubernetes",
+       icon: "https://cdn.simpleicons.org/kubernetes/326CE5"
+     },
+     {
+       name: "Jenkins",
+       icon: "https://cdn.simpleicons.org/jenkins/D24939"
+     },
+     {
+       name: "GitHub Actions",
+       icon: "https://cdn.simpleicons.org/githubactions/2088FF"
+     },
+     {
+       name: "Terraform",
+       icon: "https://cdn.simpleicons.org/terraform/7B42BC"
+     },
+     {
+       name: "Ansible",
+       icon: "https://cdn.simpleicons.org/ansible/EE0000"
+     },
+     {
+       name: "Prometheus",
+       icon: "https://cdn.simpleicons.org/prometheus/E6522C"
+     },
+     {
+       name: "Grafana",
+       icon: "https://cdn.simpleicons.org/grafana/F46800"
+     },
+     {
+       name: "Loki",
+       icon: "https://cdn.simpleicons.org/loki/?" // Note: SimpleIcons may not have Loki, Grafana icon reused in prev example
+     },
+     {
+       name: "AlertManager",
+       icon: "https://cdn.simpleicons.org/prometheus/E6522C" // No specific icon, Prometheus often used
+     },
+     {
+       name: "SonarQube",
+       icon: "https://cdn.simpleicons.org/sonarqube/4E9BCD"
+     },
+     {
+       name: "RabbitMQ",
+       icon: "https://cdn.simpleicons.org/rabbitmq/FF6600"
+     },
+     {
+       name: "Redis",
+       icon: "https://cdn.simpleicons.org/redis/DC382D"
+     },
+     {
+       name: "PostgreSQL",
+       icon: "https://cdn.simpleicons.org/postgresql/4169E1"
+     },
+     {
+       name: "Python",
+       icon: "https://cdn.simpleicons.org/python/3776AB"
+     },
+     {
+       name: "Bash",
+       icon: "https://cdn.simpleicons.org/gnubash/4EAA25"
+     },
+     {
+       name: "Nginx",
+       icon: "https://cdn.simpleicons.org/nginx/009639"
+     }
+   ];
 
-  // --- Framer Motion Variants ---
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -178,22 +232,16 @@ function App() {
     show: { opacity: 1, y: 0 }
   };
 
-  // --- Component Return ---
   return (
-    // Main wrapper div with dark mode class
     <div className={`min-h-screen bg-gray-50 transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
-
-      {/* ============================================ */}
-      {/* === INSERT SCROLL INDICATOR JSX HERE === */}
+      {/* Scroll Progress Bar - Update style based on state */}
       <div
         id="scroll-progress-bar"
-        className="fixed top-0 left-0 z-50 h-1 bg-blue-500 dark:bg-blue-400 transition-width duration-100 ease-linear" // Added transition
+        className="fixed top-0 left-0 z-[60] h-1 bg-blue-500 dark:bg-blue-400 transition-width duration-100 ease-linear" // Increased z-index
         style={{ width: `${scrollPercentage}%` }} // Use state for width
       ></div>
-      {/* ============================================ */}
 
-
-      {/* Theme Toggle Button */}
+      {/* Theme Toggle */}
       <button
         onClick={() => setDarkMode(!darkMode)}
         className="fixed top-4 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
@@ -206,7 +254,7 @@ function App() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="text-center md:text-left">
-              <motion.h1
+              <motion.h1 
                 className="text-4xl md:text-6xl font-bold mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -214,7 +262,7 @@ function App() {
               >
                 Oluwatobiloba Durodola
               </motion.h1>
-              <motion.p
+              <motion.p 
                 className="text-xl md:text-2xl mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -222,7 +270,7 @@ function App() {
               >
                 DevOps Engineer | Cloud Enthusiast | AWS Certified
               </motion.p>
-              <motion.div
+              <motion.div 
                 className="flex justify-center md:justify-start space-x-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -239,19 +287,19 @@ function App() {
                 </a>
               </motion.div>
             </div>
-            <motion.div
-              className="profile-image" // Uses CSS from index.css
+            <motion.div 
+              className="profile-image" // Ensure CSS for .profile-image handles size/shape if needed
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
               style={{
-                animation: 'float 6s ease-in-out infinite' // Uses CSS keyframe
+                animation: 'float 6s ease-in-out infinite' // Ensure @keyframes float is in CSS
               }}
             >
-              <img
-                src="/profilepic.jpg" // Correct path for image in public folder
+              <img 
+              src={profilePic} // Ensure this path is correct
                 alt="Oluwatobiloba Durodola"
-                className="w-64 h-64 rounded-full object-cover shadow-lg" // Tailwind classes for size/shape
+                className="w-64 h-64 rounded-full object-cover shadow-lg" // Tailwind controls size/shape
               />
             </motion.div>
           </div>
@@ -259,22 +307,25 @@ function App() {
       </header>
 
       {/* About Section */}
-      {/* Use fade-in class from index.css for observer */}
-      <motion.section
+      {/* Make sure this section has fade-in class if you want the observer to target it */}
+      <motion.section 
         id="about" // Added ID for potential navigation
-        className="py-20 fade-in dark:bg-gray-900 dark:text-white" // Added fade-in
+        className="py-20 fade-in dark:bg-gray-900 dark:text-white" 
         variants={container}
         initial="hidden"
-        animate="show" // This might override observer; consider removing or coordinating
+        // Remove animate="show" if using IntersectionObserver for fade
+        // animate="show" 
+        whileInView="show" // Use whileInView for Framer Motion scroll trigger
+        viewport={{ once: true, amount: 0.1 }} // Adjust viewport settings
       >
         <div className="container mx-auto px-4 max-w-5xl">
-          <motion.h2
+          <motion.h2 
             className="text-3xl font-bold mb-8 text-center"
             variants={item}
           >
             About Me
           </motion.h2>
-          <motion.p
+          <motion.p 
             className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto"
             variants={item}
           >
@@ -284,27 +335,29 @@ function App() {
       </motion.section>
 
       {/* Projects Section */}
-      <motion.section
-        id="projects" // Added ID
-        className="py-20 bg-white dark:bg-gray-800 fade-in" // Added fade-in
-         variants={container} // Use Framer Motion container variant
-         initial="hidden"
-         whileInView="show" // Trigger animation when in view
-         viewport={{ once: true, amount: 0.1 }} // Adjust viewport settings
+      {/* Assign ID and ensure fade-in class */}
+      <motion.section 
+        id="projects" 
+        className="py-20 bg-white dark:bg-gray-800 fade-in" // Keep fade-in for observer OR remove if only using Framer Motion
+        variants={container}
+        initial="hidden"
+        // animate="show" // Remove if using whileInView or observer
+        whileInView="show" // Use Framer Motion scroll trigger
+        viewport={{ once: true, amount: 0.1 }}
       >
         <div className="container mx-auto px-4 max-w-5xl">
-          <motion.h2
+          <motion.h2 
             className="text-3xl font-bold mb-12 text-center dark:text-white"
-             variants={item} // Animate heading separately
+            variants={item}
           >
             Projects
           </motion.h2>
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, index) => (
-              <motion.div
-                key={index}
+              <motion.div 
+                key={index} 
                 className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow"
-                 variants={item} // Apply item animation to each project card
+                variants={item} // Apply item variant for stagger
               >
                 <h3 className="text-xl font-bold mb-2 dark:text-white">{project.title}</h3>
                 <p className="text-gray-600 dark:text-gray-300 italic mb-3">{project.date}</p>
@@ -325,59 +378,51 @@ function App() {
       </motion.section>
 
       {/* Skills & Tools Section */}
-      <motion.section
+      <motion.section 
         id="skills-tools" // Added ID
-        className="py-20 bg-gray-50 dark:bg-gray-900 fade-in" // Added fade-in
+        className="py-20 bg-gray-50 dark:bg-gray-900 fade-in"
         variants={container}
         initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.1 }}
+        // animate="show" // Remove if using whileInView or observer
+        whileInView="show" // Use Framer Motion scroll trigger
+         viewport={{ once: true, amount: 0.1 }}
       >
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid md:grid-cols-2 gap-12">
             {/* Technical Skills Column */}
             <motion.div variants={item}>
               <h2 className="text-3xl font-bold mb-8 dark:text-white">Technical Skills</h2>
-              <div className="flex flex-wrap gap-3"> {/* Use flex-wrap for tag-like appearance */}
-                {[
-                  "Cloud Computing", "Containerization", "Container Orchestration",
-                  "Infrastructure as Code (IaC)", "Configuration Management",
-                  "Monitoring & Observability", "CI/CD", "Linux Systems",
-                  "Version Control (Git)", "Automation & Scripting", "Log Management"
-                ].map((skill, index) => (
-                  <motion.span
-                    key={index}
-                    className="bg-white dark:bg-gray-700 rounded-full px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm"
-                    variants={item} // Animate each skill tag
-                  >
-                    {skill}
-                  </motion.span>
-                ))}
+              <div className="space-y-2">
+                 <p className="text-gray-700 dark:text-gray-300">• Cloud Computing</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Containerization</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Container Orchestration</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Infrastructure as Code (IaC)</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Configuration Management</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Monitoring & Observability</p>
+                 <p className="text-gray-700 dark:text-gray-300">• CI/CD</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Linux Systems</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Version Control (Git)</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Automation & Scripting</p>
+                 <p className="text-gray-700 dark:text-gray-300">• Log Management</p>
               </div>
             </motion.div>
             {/* Tools & Technologies Column */}
             <motion.div variants={item}>
               <h2 className="text-3xl font-bold mb-8 dark:text-white">Tools & Technologies</h2>
-              {/* Using grid for tool logos */}
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-6"> {/* Adjusted grid for potentially more tools */}
                 {tools.map((tool, index) => (
-                  <motion.div
-                    key={index}
+                  <motion.div 
+                    key={index} 
                     className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center"
-                    variants={item} // Animate each tool
-                    title={tool.name} // Add tooltip for name
+                    variants={item} // Apply item variant for stagger
                   >
-                    <img
-                      src={tool.icon} // Using direct SVG links from Simple Icons CDN
-                      alt={`${tool.name} logo`}
-                      className="w-12 h-12 mb-2 object-contain" // Use object-contain
-                      // Add lazy loading
-                      loading="lazy"
-                      // Optional: Add basic error handling
-                      onError={(e) => { e.currentTarget.style.display = 'none'; /* Hide broken image */ const span = document.createElement('span'); span.textContent = tool.name; span.className = 'text-xs text-red-500'; e.currentTarget.parentNode?.appendChild(span);}}
+                    <img 
+                      src={tool.icon} 
+                      alt={`${tool.name} logo`} 
+                      className="w-10 h-10 sm:w-12 sm:h-12 mb-2 object-contain" // Slightly smaller icons, ensure contain
+                      loading="lazy" // Add lazy loading for icons
                     />
-                     {/* Removed the text label below icon to rely on title tooltip */}
-                     {/* <p className="text-gray-700 dark:text-gray-300 text-sm text-center">{tool.name}</p> */}
+                    <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm text-center">{tool.name}</p>
                   </motion.div>
                 ))}
               </div>
@@ -386,18 +431,18 @@ function App() {
         </div>
       </motion.section>
 
-
       {/* Certifications Section */}
-      <motion.section
+      <motion.section 
         id="certifications" // Added ID
-        className="py-20 bg-white dark:bg-gray-800 fade-in" // Added fade-in
+        className="py-20 bg-white dark:bg-gray-800 fade-in"
         variants={container}
         initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, amount: 0.1 }}
+        // animate="show" // Remove if using whileInView or observer
+        whileInView="show" // Use Framer Motion scroll trigger
+         viewport={{ once: true, amount: 0.1 }}
       >
         <div className="container mx-auto px-4 max-w-5xl">
-          <motion.h2
+          <motion.h2 
             className="text-3xl font-bold mb-12 text-center dark:text-white"
             variants={item}
           >
@@ -405,10 +450,10 @@ function App() {
           </motion.h2>
           <div className="space-y-8">
             {certifications.map((cert, index) => (
-              <motion.div
-                key={index}
+              <motion.div 
+                key={index} 
                 className="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-md"
-                variants={item}
+                variants={item} // Apply item variant for stagger
               >
                 <h3 className="text-xl font-bold mb-2 dark:text-white">{cert.title}</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-2">{cert.issuer} {cert.date && `- ${cert.date}`}</p>
@@ -431,38 +476,36 @@ function App() {
       </motion.section>
 
       {/* Soft Skills Section */}
-      <motion.section
+      <motion.section 
         id="soft-skills" // Added ID
-        className="py-20 bg-gray-50 dark:bg-gray-900 fade-in" // Added fade-in
+        className="py-20 bg-gray-50 dark:bg-gray-900 fade-in"
         variants={container}
         initial="hidden"
-        whileInView="show"
+        // animate="show" // Remove if using whileInView or observer
+        whileInView="show" // Use Framer Motion scroll trigger
         viewport={{ once: true, amount: 0.1 }}
       >
         <div className="container mx-auto px-4 max-w-5xl">
-          <motion.h2
+          <motion.h2 
             className="text-3xl font-bold mb-8 text-center dark:text-white"
             variants={item}
           >
             Soft Skills
           </motion.h2>
-          <motion.div
+          <motion.div 
             className="flex flex-wrap justify-center gap-4"
-             // Use container variant for staggering children (the tags)
-             variants={container}
-             // These initial/animate props might conflict with parent; rely on parent's trigger
-             // initial="hidden"
-             // animate="show"
+            // Apply variants to the container if you want the whole group to animate,
+            // or apply to individual items as below for stagger effect
           >
             {[
               "Leadership", "Critical Thinking", "Communication",
-              "Managing Complex Tasks", "Team Collaboration",
+              "Managing Complex Tasks", "Team Collaboration", 
               "Entrepreneurship", "Quantitative Reasoning"
             ].map((skill, index) => (
-              <motion.div
-                key={index}
+              <motion.div 
+                key={index} 
                 className="bg-white dark:bg-gray-700 rounded-full px-6 py-2 shadow-sm"
-                variants={item} // Use item variant for each tag's animation
+                variants={item} // Apply item variant for stagger
               >
                 <p className="text-gray-700 dark:text-gray-300">{skill}</p>
               </motion.div>
@@ -476,22 +519,21 @@ function App() {
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center">
             <div className="flex justify-center space-x-6 mb-4">
-               <a href="mailto:nowdurodola@gmail.com" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
-                 <Mail size={20} />
-               </a>
-               <a href="https://github.com/onlydurodola" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
-                 <Github size={20} />
-               </a>
-               <a href="https://linkedin.com/in/oluwatobilobadurodola" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
-                 <Linkedin size={20} />
-               </a>
-             </div>
+              <a href="mailto:nowdurodola@gmail.com" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
+                <Mail size={20} />
+              </a>
+              <a href="https://github.com/onlydurodola" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
+                <Github size={20} />
+              </a>
+              <a href="https://linkedin.com/in/oluwatobilobadurodola" className="hover:text-blue-300 transition-colors" target="_blank" rel="noopener noreferrer">
+                <Linkedin size={20} />
+              </a>
+            </div>
             <p className="text-sm">© 2025 Oluwatobiloba Durodola</p>
           </div>
         </div>
       </footer>
-
-    </div> // End main wrapper div
+    </div>
   );
 }
 
