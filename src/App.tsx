@@ -84,25 +84,31 @@ function App() {
       title: "ALX Cloud Computing Program Completion",
       issuer: "ALX (AWS Academy Partner)",
       date: "Completed Mar 2024",
-      url: "https://intranet.alxswe.com/certificates/eyB3XFGz-T",
+      url: "https://intranet.alxswe.com/certificates/eYB3xFGZrT",
       linkText: "Validate Certificate"
     },
     {
       title: "AWS Certified Solutions Architect Associate",
       issuer: "Amazon Web Services (AWS)",
       date: "Issued Feb 2024 (Expires Feb 2027)",
+      url: "https://aws.amazon.com/verification",
+      linkText: "Validate Certificate",
       id: "Credential ID: fa9cccbfd5bc429aba0f35a7fee06f1c"
     },
     {
       title: "AWS Certified Cloud Practitioner",
       issuer: "Amazon Web Services (AWS)",
       date: "Issued Oct 2023 (Expires Oct 2026)",
+      url: "https://aws.amazon.com/verification",
+      linkText: "Validate Certificate",
       id: "Credential ID: 4DF7XSJ20EQ4Q5SG"
     },
     {
       title: "Accelerated DevOps Engineer Industrial Training",
       issuer: "IBT Learning",
       date: "Issued Feb 2025",
+      url: "https://learn.ibtlearning.co/certificates/wlsbn6gair",
+      linkText: "Validate Certificate",
       id: "Credential ID: wlsbn6gair"
     }
   ];
