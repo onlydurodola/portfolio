@@ -20,9 +20,9 @@
 
 .profile-image {
   position: relative;
-  border-radius: 30%;
+  border-radius: 30px;
   overflow: hidden;
-  background: linear-gradient(145deg, #1e293b, #334155); 
+  background: linear-gradient(145deg, #1e293b, #334155);
   box-shadow: 
     20px 20px 60px #1a1f2e,
     -20px -20px 60px #384766;
@@ -43,26 +43,6 @@
 
 .profile-image:hover::before {
   opacity: 1;
-}
-
-#projects { 
-    position: relative; 
-    overflow: hidden; 
-    background: linear-gradient(-45deg, #1a202c, #2d3748, #2c7a7b, #319795); 
-    background-size: 400% 400%; 
-    animation: gradientBG 15s ease infinite; 
-}
-
-
-#projects .bg-gray-50.dark\\:bg-gray-700 { 
-    background-color: rgba(45, 55, 72, 0.8); 
-    /* Or add a backdrop filter for glassmorphism */
-    /* backdrop-filter: blur(10px); */
-    /* background-color: rgba(45, 55, 72, 0.6); */
-}
-
-#projects .bg-gray-50 {
-     background-color: rgba(255, 255, 255, 0.8); 
 }
 
 .dark {
@@ -109,10 +89,4 @@
   100% {
     transform: translateY(0px);
   }
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
