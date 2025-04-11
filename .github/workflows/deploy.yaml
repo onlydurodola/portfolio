@@ -1,25 +1,71 @@
-name: Deploy Portfolio to EC2
+name: Build and Deploy
 
 on:
   push:
-    branches:  
-      - main  # Or your default branch
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Copy files to EC2 via SCP
-      uses: appleboy/scp-action@v0.1.7 
-      with:
-        host: ${{ secrets.EC2_HOST }} 
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }} 
-        port: 22 
-        source: "index.html,css/*,img/*" 
-        target: "/var/www/html" 
-        strip_components: 0 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter 
+        run: npm run lint --if-present
+
+      - name: Run tests 
+        run: npm test --if-present
+
+      - name: Build project
+        run: npm run build --if-present
+
+      - name: Upload build artifact 
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-files
+          path: ./dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build 
+    if: github.ref == 'refs/heads/main' # Only deploy on pushes to main branch
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: production-files
+          path: ./dist 
+      - name: Deploy to EC2 
+        uses: easingthemes/ssh-deploy@v5.1.0 
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.EC2_HOST }}
+          REMOTE_USER: ${{ secrets.EC2_USERNAME }}
+          SOURCE: "dist/" 
+          TARGET: ${{ secrets.EC2_TARGET_DIR }} 
+          ARGS: '--delete' 
+
+      - name: Run post-deploy commands 
+        uses: appleboy/ssh-action@v1.0.3 
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Deployment complete. Running post-deploy steps..."
+            # Ensure your EC2 user has permissions to restart nginx (e.g., via sudo without password)
+            # Or run this script as root if necessary/configured
+            sudo systemctl restart nginx
+            echo "Nginx restarted."
+            echo "Post-deploy steps finished."
