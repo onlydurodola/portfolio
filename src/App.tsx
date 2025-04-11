@@ -254,7 +254,7 @@ function App() {
               }}
             >
               <img 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a" 
+                src="https://drive.google.com/file/d/1zVlpxZQuDIATFdy3zhLIyj_9V9F6k9FN/view?usp=drivesdk " 
                 alt="Oluwatobiloba Durodola"
                 className="w-64 h-64 rounded-full object-cover shadow-lg"
               />
